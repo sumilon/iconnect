@@ -1,63 +1,96 @@
 {% extends "base.html" %}
-{% block title %}Search - iConnect{% endblock %}
+{% block title %}Search — iConnect{% endblock %}
 {% block extra_style %}
 <style>
-    .search-bar { display: flex; gap: 10px; margin-bottom: 24px; }
-    .search-bar input {
-      flex: 1; padding: 11px 16px; border: 1.5px solid #ddd;
-      border-radius: 10px; font-size: 0.95rem;
+    .search-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
     }
-    .search-bar input:focus { outline: none; border-color: #1877f2; }
+    .search-form input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 1.5px solid #dde1e7;
+        border-radius: 10px;
+        font-size: 0.93rem;
+        background: white;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-form input:focus {
+        outline: none;
+        border-color: #1877f2;
+        box-shadow: 0 0 0 3px rgba(24,119,242,0.1);
+    }
+    .results-count {
+        font-size: 0.8rem;
+        color: #8a8d91;
+        margin-bottom: 12px;
+    }
     .user-card {
-      background: white; border-radius: 12px;
-      padding: 14px 16px; margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      display: flex; align-items: center; gap: 14px;
+        background: white;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: box-shadow 0.15s;
     }
-    .user-card .info { flex: 1; }
-    .user-card .info .uname { font-weight: 700; font-size: 0.95rem; }
-    .user-card .info .stats { font-size: 0.78rem; color: #999; margin-top: 2px; }
+    .user-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .user-card .info { flex: 1; min-width: 0; }
+    .user-card .uname {
+        font-weight: 700;
+        font-size: 0.92rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .user-card .stats { font-size: 0.76rem; color: #8a8d91; margin-top: 2px; }
 </style>
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h2 style="margin-bottom:20px;">&#128269; Find People</h2>
+    <div class="page-header">
+        <h2>&#128269; Find People</h2>
+    </div>
 
-    <form method="GET" action="{{ url_for('main.search') }}" class="search-bar">
-        <input type="text" name="q" placeholder="Search by username..." value="{{ query }}" autofocus />
+    <form method="GET" action="{{ url_for('main.search') }}" class="search-form">
+        <input type="text" name="q" placeholder="Search by username…"
+               value="{{ query }}" autofocus autocomplete="off" />
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
     {% if query and not results %}
-    <div class="empty">
-        <div class="icon">🤷</div>
-        <p>No users found for "<strong>{{ query }}</strong>"</p>
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#129335;</div>
+            <p>No users found for <strong>{{ query }}</strong></p>
+        </div>
     </div>
 
     {% elif results %}
-    <p style="font-size:0.83rem; color:#aaa; margin-bottom:14px;">
-        {{ results|length }} result{{ 's' if results|length != 1 }} for "{{ query }}"
-    </p>
+    <p class="results-count">{{ results|length }} result{{ 's' if results|length != 1 }} for "{{ query }}"</p>
     {% for u in results %}
     <div class="user-card">
-        <div class="avatar" style="width:44px;height:44px;font-size:1.1rem;">{{ u.username[0].upper() }}</div>
+        <div class="avatar" style="width:42px;height:42px;font-size:1rem;">{{ u.username[0].upper() }}</div>
         <div class="info">
             <div class="uname">{{ u.username }}</div>
             <div class="stats">
-                {{ u.post_count }} post{{ 's' if u.post_count != 1 }} &nbsp;·&nbsp;
-                {{ u.follower_count }} follower{{ 's' if u.follower_count != 1 }}
+                {{ u.post_count }} post{{ 's' if u.post_count != 1 }}&nbsp;&middot;&nbsp;{{ u.follower_count }} follower{{ 's' if u.follower_count != 1 }}
             </div>
         </div>
-        <a href="{{ url_for('main.view_profile', target_uid=u.uid) }}" class="btn btn-outline btn-sm">View Profile</a>
+        <a href="{{ url_for('main.view_profile', target_uid=u.uid) }}" class="btn btn-outline btn-sm">View</a>
     </div>
     {% endfor %}
 
     {% elif not query %}
-    <div class="empty">
-        <div class="icon">&#128270;</div>
-        <p>Type a username above to find people.</p>
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#128270;</div>
+            <p>Enter a username above to find people.</p>
+        </div>
     </div>
     {% endif %}
-
 </div>
 {% endblock %}
