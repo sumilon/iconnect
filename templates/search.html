@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Search — iConnect{% endblock %}
+{% block extra_style %}
+<style>
+    .search-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    .search-form input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 1.5px solid #dde1e7;
+        border-radius: 10px;
+        font-size: 0.93rem;
+        background: white;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-form input:focus {
+        outline: none;
+        border-color: #1877f2;
+        box-shadow: 0 0 0 3px rgba(24,119,242,0.1);
+    }
+    .results-count {
+        font-size: 0.8rem;
+        color: #8a8d91;
+        margin-bottom: 12px;
+    }
+    .user-card {
+        background: white;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: box-shadow 0.15s;
+    }
+    .user-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .user-card .info { flex: 1; min-width: 0; }
+    .user-card .uname {
+        font-weight: 700;
+        font-size: 0.92rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .user-card .stats { font-size: 0.76rem; color: #8a8d91; margin-top: 2px; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>&#128269; Find People</h2>
+    </div>
+
+    <form method="GET" action="{{ url_for('main.search') }}" class="search-form">
+        <input type="text" name="q" placeholder="Search by username…"
+               value="{{ query }}" autofocus autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if query and not results %}
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#129335;</div>
+            <p>No users found for <strong>{{ query }}</strong></p>
+        </div>
+    </div>
+
+    {% elif results %}
+    <p class="results-count">{{ results|length }} result{{ 's' if results|length != 1 }} for "{{ query }}"</p>
+    {% for u in results %}
+    <div class="user-card">
+        <div class="avatar" style="width:42px;height:42px;font-size:1rem;">{{ u.username[0].upper() }}</div>
+        <div class="info">
+            <div class="uname">{{ u.username }}</div>
+            <div class="stats">
+                {{ u.post_count }} post{{ 's' if u.post_count != 1 }}&nbsp;&middot;&nbsp;{{ u.follower_count }} follower{{ 's' if u.follower_count != 1 }}
+            </div>
+        </div>
+        <a href="{{ url_for('main.view_profile', target_uid=u.uid) }}" class="btn btn-outline btn-sm">View</a>
+    </div>
+    {% endfor %}
+
+    {% elif not query %}
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#128270;</div>
+            <p>Enter a username above to find people.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

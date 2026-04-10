@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Feed — iConnect{% endblock %}
+{% block extra_style %}
+<style>
+    .feed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .feed-header h2 { font-size: 1.05rem; font-weight: 700; color: #1c1e21; }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0 8px;
+    }
+    .pagination .btn { min-width: 120px; }
+    .end-msg {
+        text-align: center;
+        color: #bbb;
+        font-size: 0.8rem;
+        padding: 12px 0 24px;
+    }
+    .post-actions { margin-left: auto; flex-shrink: 0; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="feed-header">
+        <h2>&#127968; Your Feed</h2>
+        <a href="{{ url_for('posts.upload') }}" class="btn btn-primary btn-sm">&#43; Post</a>
+    </div>
+
+    {% if following_count == 0 %}
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#128101;</div>
+            <p>You're not following anyone yet.<br>Search for people to start seeing posts.</p>
+            <a href="{{ url_for('main.search') }}" class="btn btn-primary">Find People</a>
+        </div>
+    </div>
+
+    {% elif not posts %}
+    <div class="card">
+        <div class="empty">
+            <div class="icon">&#128237;</div>
+            <p>No posts yet from people you follow.</p>
+            <a href="{{ url_for('posts.upload') }}" class="btn btn-primary">Share Something</a>
+        </div>
+    </div>
+
+    {% else %}
+    {% for post in posts %}
+    <div class="card">
+        <div class="post-meta">
+            <div class="avatar">{{ post.username[0] }}</div>
+            <div class="info">
+                <div class="name">
+                    <a href="{{ url_for('main.view_profile', target_uid=post.uid) }}"
+                       style="color:inherit; text-decoration:none;">{{ post.username }}</a>
+                </div>
+                <div class="sub">{{ post.created_at }}</div>
+            </div>
+        </div>
+        <img class="post-img" src="{{ post.image_url }}" alt="post by {{ post.username }}" loading="lazy" />
+        {% if post.caption %}
+        <div class="post-caption">{{ post.caption }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="pagination">
+        {% if after_doc_id %}
+        <a href="{{ url_for('main.feed') }}" class="btn btn-grey btn-sm">&#8592; Newest</a>
+        {% endif %}
+        {% if has_next %}
+        <a href="{{ url_for('main.feed', after=last_id) }}" class="btn btn-outline btn-sm">Older posts &#8594;</a>
+        {% endif %}
+    </div>
+    {% if not has_next and after_doc_id %}
+    <p class="end-msg">&#10003; You're all caught up</p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
