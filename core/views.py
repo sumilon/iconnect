@@ -8,7 +8,6 @@ from flask import Blueprint, Response, redirect, render_template, request, sessi
 from .extensions import db
 from .helpers import (
     fmt_dt,
-    generate_csrf_token,
     get_approved_following_uids,
     get_pending_count,
     login_required,
@@ -182,7 +181,6 @@ def my_profile():
         is_own=True,
         pending_requests=pending_requests,
         pending_count=pending_count,
-        csrf_token=generate_csrf_token(),
     )
 
 
@@ -234,5 +232,4 @@ def view_profile(target_uid):
         follow_status=follow_status,
         target_uid=target_uid,
         pending_count=pending_count,
-        csrf_token=generate_csrf_token(),
     )

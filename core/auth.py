@@ -10,7 +10,6 @@ from .helpers import (
     firebase_change_password,
     firebase_sign_in,
     firebase_sign_up,
-    generate_csrf_token,
     is_rate_limited,
     utcnow,
     validate_csrf,
@@ -26,18 +25,16 @@ def register():
         return redirect(url_for("main.feed"))
 
     if request.method == "GET":
-        return render_template("register.html", csrf_token=generate_csrf_token())
+        return render_template("register.html")
 
     # ── Rate limit: max 10 attempts per IP per 5 minutes ───────────────────
     if is_rate_limited("register"):
         return render_template("register.html",
-                               error="Too many attempts. Please wait a few minutes and try again.",
-                               csrf_token=generate_csrf_token()), 429
+                               error="Too many attempts. Please wait a few minutes and try again."), 429
 
     # ── CSRF guard ─────────────────────────────────────────────────────────
     if not validate_csrf():
-        return render_template("register.html", error="Invalid form submission.",
-                               csrf_token=generate_csrf_token())
+        return render_template("register.html", error="Invalid form submission.")
 
     username = request.form.get("username", "").strip().lower()
     email    = request.form.get("email", "").strip()
@@ -45,33 +42,28 @@ def register():
 
     # ── Field presence ──────────────────────────────────────────────────────
     if not username or not email or not password:
-        return render_template("register.html", error="All fields are required.",
-                               csrf_token=generate_csrf_token())
+        return render_template("register.html", error="All fields are required.")
 
     # ── Username format: 3–20 chars, lowercase letters / digits / underscore ─
     if not USERNAME_RE.match(username):
         return render_template(
             "register.html",
             error="Username must be 3–20 characters: letters, numbers, underscores only.",
-            csrf_token=generate_csrf_token(),
         )
 
     # ── Password minimum length ─────────────────────────────────────────────
     if len(password) < 6:
         return render_template("register.html",
-                               error="Password must be at least 6 characters.",
-                               csrf_token=generate_csrf_token())
+                               error="Password must be at least 6 characters.")
 
     # ── Username uniqueness check in Firestore ──────────────────────────────
     if db.collection("users").where("username", "==", username).get():
-        return render_template("register.html", error="Username already taken.",
-                               csrf_token=generate_csrf_token())
+        return render_template("register.html", error="Username already taken.")
 
     # ── Create Firebase Auth account ────────────────────────────────────────
     result = firebase_sign_up(email, password)
     if "error" in result:
-        return render_template("register.html", error=result["error"]["message"],
-                               csrf_token=generate_csrf_token())
+        return render_template("register.html", error=result["error"]["message"])
 
     # ── Write public user profile to Firestore ─────────────────────────────
     uid = result["localId"]
@@ -100,38 +92,33 @@ def login():
     if request.method == "GET":
         msg = request.args.get("msg")
         success = "Password changed successfully. Please log in again." if msg == "password_changed" else None
-        return render_template("login.html", success=success, csrf_token=generate_csrf_token())
+        return render_template("login.html", success=success)
 
     # ── Rate limit: max 10 attempts per IP per 5 minutes ───────────────────
     if is_rate_limited("login"):
         return render_template("login.html",
-                               error="Too many attempts. Please wait a few minutes and try again.",
-                               csrf_token=generate_csrf_token()), 429
+                               error="Too many attempts. Please wait a few minutes and try again."), 429
 
     # ── CSRF guard ─────────────────────────────────────────────────────────
     if not validate_csrf():
-        return render_template("login.html", error="Invalid form submission.",
-                               csrf_token=generate_csrf_token())
+        return render_template("login.html", error="Invalid form submission.")
 
     email    = request.form.get("email", "").strip()
     password = request.form.get("password", "").strip()
 
     if not email or not password:
-        return render_template("login.html", error="Email and password are required.",
-                               csrf_token=generate_csrf_token())
+        return render_template("login.html", error="Email and password are required.")
 
     # ── Firebase Auth verification ──────────────────────────────────────────
     result = firebase_sign_in(email, password)
     if "error" in result:
-        return render_template("login.html", error=result["error"]["message"],
-                               csrf_token=generate_csrf_token())
+        return render_template("login.html", error=result["error"]["message"])
 
     # ── Load user profile from Firestore ───────────────────────────────────
     uid      = result["localId"]
     user_doc = db.collection("users").document(uid).get()
     if not user_doc.exists:
-        return render_template("login.html", error="User profile not found.",
-                               csrf_token=generate_csrf_token())
+        return render_template("login.html", error="User profile not found.")
 
     user = user_doc.to_dict()
     session["uid"]      = uid
@@ -146,14 +133,12 @@ def change_password():
         return redirect(url_for("auth.login"))
 
     if request.method == "GET":
-        return render_template("change_password.html",
-                               csrf_token=generate_csrf_token())
+        return render_template("change_password.html")
 
     # ── CSRF guard ─────────────────────────────────────────────────────────
     if not validate_csrf():
         return render_template("change_password.html",
-                               error="Invalid form submission.",
-                               csrf_token=generate_csrf_token())
+                               error="Invalid form submission.")
 
     current_password = request.form.get("current_password", "").strip()
     new_password     = request.form.get("new_password", "").strip()
@@ -162,49 +147,41 @@ def change_password():
     # ── Field presence ──────────────────────────────────────────────────────
     if not current_password or not new_password or not confirm_password:
         return render_template("change_password.html",
-                               error="All fields are required.",
-                               csrf_token=generate_csrf_token())
+                               error="All fields are required.")
 
     # ── New password length ─────────────────────────────────────────────────
     if len(new_password) < 6:
         return render_template("change_password.html",
-                               error="New password must be at least 6 characters.",
-                               csrf_token=generate_csrf_token())
+                               error="New password must be at least 6 characters.")
 
     # ── Confirm match ───────────────────────────────────────────────────────
     if new_password != confirm_password:
         return render_template("change_password.html",
-                               error="New passwords do not match.",
-                               csrf_token=generate_csrf_token())
+                               error="New passwords do not match.")
 
     # ── Same password check ─────────────────────────────────────────────────
     if current_password == new_password:
         return render_template("change_password.html",
-                               error="New password must be different from your current password.",
-                               csrf_token=generate_csrf_token())
+                               error="New password must be different from your current password.")
 
     # ── Re-authenticate with current password to get a fresh idToken ────────
     # Firebase requires a recent idToken to authorise a password change.
     user_doc = db.collection("users").document(session["uid"]).get()
     if not user_doc.exists:
-        return render_template("change_password.html",
-                               error="User not found.",
-                               csrf_token=generate_csrf_token())
+        return render_template("change_password.html", error="User not found.")
 
     email = user_doc.to_dict().get("email", "")
     auth_result = firebase_sign_in(email, current_password)
     if "error" in auth_result:
         return render_template("change_password.html",
-                               error="Current password is incorrect.",
-                               csrf_token=generate_csrf_token())
+                               error="Current password is incorrect.")
 
     # ── Change password via Firebase REST API ───────────────────────────────
     id_token      = auth_result["idToken"]
     change_result = firebase_change_password(id_token, new_password)
     if "error" in change_result:
         return render_template("change_password.html",
-                               error=change_result["error"]["message"],
-                               csrf_token=generate_csrf_token())
+                               error=change_result["error"]["message"])
 
     # ── Success: clear session and force re-login ───────────────────────────
     session.clear()

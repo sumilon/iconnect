@@ -19,7 +19,6 @@ from werkzeug.utils import secure_filename
 from .extensions import db, storage_client
 from .helpers import (
     allowed_file,
-    generate_csrf_token,
     get_pending_count,
     login_required,
     utcnow,
@@ -37,14 +36,12 @@ def upload():
     pending_count = get_pending_count(uid)
 
     if request.method == "GET":
-        return render_template("upload.html", pending_count=pending_count,
-                               csrf_token=generate_csrf_token())
+        return render_template("upload.html", pending_count=pending_count)
 
     # ── CSRF guard ─────────────────────────────────────────────────────────
     if not validate_csrf():
         return render_template("upload.html", error="Invalid form submission.",
-                               pending_count=pending_count,
-                               csrf_token=generate_csrf_token())
+                               pending_count=pending_count)
 
     image_file = request.files.get("image")
     caption    = request.form.get("caption", "").strip()
@@ -52,8 +49,7 @@ def upload():
     # ── Validate file presence ──────────────────────────────────────────────
     if not image_file or not image_file.filename:
         return render_template("upload.html", error="Please select an image.",
-                               pending_count=pending_count,
-                               csrf_token=generate_csrf_token())
+                               pending_count=pending_count)
 
     # ── Validate file type ──────────────────────────────────────────────────
     allowed = current_app.config["ALLOWED_EXTENSIONS"]
@@ -62,7 +58,6 @@ def upload():
             "upload.html",
             error=f"File type not supported. Allowed: {', '.join(sorted(allowed))}.",
             pending_count=pending_count,
-            csrf_token=generate_csrf_token(),
         )
 
     # ── Sanitise filename and upload to GCS ────────────────────────────────
