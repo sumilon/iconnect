@@ -1,4 +1,4 @@
-﻿"""
+"""
 Auth blueprint — /register, /login, /logout, /change-password routes.
 """
 
