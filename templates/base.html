@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}PixelComm{% endblock %}</title>
+    <title>{% block title %}iConnect{% endblock %}</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; }
@@ -105,7 +105,7 @@
 
 {% if session.get('uid') %}
 <nav>
-    <a href="/feed" class="brand">📸 PixelComm</a>
+    <a href="/feed" class="brand">🔗 iConnect</a>
     <div class="nav-links">
         <a href="/feed">Feed</a>
         <a href="/search">Search</a>
@@ -118,6 +118,14 @@
         </a>
         <span class="nav-user">👤 {{ session.get('username') }}</span>
         <a href="/logout" class="btn-nav-logout">Logout</a>
+    </div>
+</nav>
+{% else %}
+<nav>
+    <a href="/" class="brand">🔗 iConnect</a>
+    <div class="nav-links">
+        <a href="/login">Log In</a>
+        <a href="/register" style="background:rgba(255,255,255,0.2); color:white;">Register</a>
     </div>
 </nav>
 {% endif %}

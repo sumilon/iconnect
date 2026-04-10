@@ -341,5 +341,31 @@ def unfollow(target_uid):
     return redirect(url_for("view_profile", target_uid=target_uid))
 
 
+@app.route("/post/delete/<post_id>", methods=["POST"])
+@login_required
+def delete_post(post_id):
+    uid      = session["uid"]
+    post_doc = db.collection("posts").document(post_id).get()
+
+    if not post_doc.exists:
+        return redirect(url_for("my_profile"))
+
+    post = post_doc.to_dict()
+
+    # Only the owner can delete their post
+    if post["uid"] != uid:
+        return redirect(url_for("my_profile"))
+
+    # Delete from Firestore
+    db.collection("posts").document(post_id).delete()
+
+    # Decrement post count
+    db.collection("users").document(uid).update({
+        "post_count": firestore.Increment(-1)
+    })
+
+    return redirect(url_for("my_profile"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)

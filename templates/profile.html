@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ user.username }} — PixelComm{% endblock %}
+{% block title %}{{ user.username }} — iConnect{% endblock %}
 {% block extra_style %}
 <style>
     .profile-header {
@@ -136,6 +136,12 @@
                 <div class="name">{{ user.username }}</div>
                 <div class="sub">{{ post.created_at }}</div>
             </div>
+            {% if is_own %}
+            <form method="POST" action="/post/delete/{{ post.id }}"
+                  onsubmit="return confirm('Delete this post? This cannot be undone.');">
+                <button class="btn btn-danger btn-sm">🗑 Delete</button>
+            </form>
+            {% endif %}
         </div>
         {% if post.caption %}
         <div class="post-caption">{{ post.caption }}</div>
