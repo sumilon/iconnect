@@ -1,4 +1,13 @@
-flask
-firebase-admin
-google-cloud-storage
-requests
+# ── Web framework ──────────────────────────────────────────────────────────
+flask>=3.0,<4.0
+werkzeug>=3.0,<4.0
+
+# ── Production WSGI server (Cloud Run / gunicorn) ──────────────────────────
+gunicorn>=22.0,<24.0
+
+# ── Firebase & Google Cloud ────────────────────────────────────────────────
+firebase-admin>=6.5,<7.0
+google-cloud-storage>=2.16,<3.0
+
+# ── HTTP client (Firebase REST Auth) ──────────────────────────────────────
+requests>=2.31,<3.0

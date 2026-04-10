@@ -23,7 +23,7 @@
 <div class="container">
     <h2 style="margin-bottom:20px;">🔍 Find People</h2>
 
-    <form method="GET" action="/search" class="search-bar">
+    <form method="GET" action="{{ url_for('main.search') }}" class="search-bar">
         <input type="text" name="q" placeholder="Search by username..." value="{{ query }}" autofocus />
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
@@ -48,7 +48,7 @@
                 {{ u.follower_count }} follower{{ 's' if u.follower_count != 1 }}
             </div>
         </div>
-        <a href="/profile/{{ u.uid }}" class="btn btn-outline btn-sm">View Profile</a>
+        <a href="{{ url_for('main.view_profile', target_uid=u.uid) }}" class="btn btn-outline btn-sm">View Profile</a>
     </div>
     {% endfor %}
 

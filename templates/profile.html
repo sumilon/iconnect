@@ -16,8 +16,7 @@
     }
     .profile-info { flex: 1; }
     .profile-info h2  { font-size: 1.35rem; margin-bottom: 4px; }
-    .profile-info .bio { font-size: 0.87rem; color: #777; margin-bottom: 10px; }
-    .profile-stats { display: flex; gap: 20px; }
+    .profile-stats { display: flex; gap: 20px; margin-top: 8px; }
     .profile-stats .stat { text-align: center; }
     .profile-stats .stat strong { display: block; font-size: 1.1rem; color: #1877f2; }
     .profile-stats .stat span   { font-size: 0.75rem; color: #999; }
@@ -38,6 +37,9 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .locked .icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+    /* Own-profile action row */
+    .profile-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 </style>
 {% endblock %}
 
@@ -49,7 +51,6 @@
         <div class="profile-avatar">{{ user.username[0] }}</div>
         <div class="profile-info">
             <h2>{{ user.username }}</h2>
-            {% if user.bio %}<p class="bio">{{ user.bio }}</p>{% endif %}
             <div class="profile-stats">
                 <div class="stat"><strong>{{ user.post_count }}</strong><span>Posts</span></div>
                 <div class="stat"><strong>{{ user.follower_count }}</strong><span>Followers</span></div>
@@ -59,16 +60,21 @@
 
         <!-- Action buttons -->
         {% if is_own %}
-        <a href="/upload" class="btn btn-primary btn-sm">+ Post</a>
+        <div class="profile-actions">
+            <a href="{{ url_for('posts.upload') }}" class="btn btn-primary btn-sm">+ Post</a>
+            <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline btn-sm">🔑 Change Password</a>
+        </div>
         {% else %}
         {% if follow_status == "approved" %}
-        <form method="POST" action="/unfollow/{{ target_uid }}">
+        <form method="POST" action="{{ url_for('social.unfollow', target_uid=target_uid) }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-grey btn-sm">Following ✓</button>
         </form>
         {% elif follow_status == "pending" %}
         <button class="btn btn-grey btn-sm" disabled>Request Sent</button>
         {% else %}
-        <form method="POST" action="/follow/{{ target_uid }}">
+        <form method="POST" action="{{ url_for('social.send_follow_request', target_uid=target_uid) }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-primary btn-sm">Follow</button>
         </form>
         {% endif %}
@@ -88,10 +94,12 @@
             </div>
             <span class="rname">{{ req.from_username }} wants to follow you</span>
             <div class="actions">
-                <form method="POST" action="/follow/approve/{{ req.request_id }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('social.approve_follow', request_id=req.request_id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn btn-success btn-sm">Approve</button>
                 </form>
-                <form method="POST" action="/follow/decline/{{ req.request_id }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('social.decline_follow', request_id=req.request_id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn btn-danger btn-sm">Decline</button>
                 </form>
             </div>
@@ -106,7 +114,6 @@
     </div>
 
     {% if not is_own and follow_status != "approved" %}
-    <!-- Posts locked -->
     <div class="locked">
         <div class="icon">🔒</div>
         {% if follow_status == "pending" %}
@@ -123,7 +130,7 @@
         <div class="icon">📷</div>
         <p>No posts yet.</p>
         {% if is_own %}
-        <a href="/upload" class="btn btn-primary">Upload Your First Photo</a>
+        <a href="{{ url_for('posts.upload') }}" class="btn btn-primary">Upload Your First Photo</a>
         {% endif %}
     </div>
 
@@ -137,8 +144,9 @@
                 <div class="sub">{{ post.created_at }}</div>
             </div>
             {% if is_own %}
-            <form method="POST" action="/post/delete/{{ post.id }}"
+            <form method="POST" action="{{ url_for('posts.delete_post', post_id=post.id) }}"
                   onsubmit="return confirm('Delete this post? This cannot be undone.');">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                 <button class="btn btn-danger btn-sm">🗑 Delete</button>
             </form>
             {% endif %}
@@ -146,7 +154,7 @@
         {% if post.caption %}
         <div class="post-caption">{{ post.caption }}</div>
         {% endif %}
-        <img class="post-img" src="{{ post.image_url }}" alt="post" />
+        <img class="post-img" src="{{ post.image_url }}" alt="post by {{ user.username }}" loading="lazy" />
     </div>
     {% endfor %}
     {% endif %}

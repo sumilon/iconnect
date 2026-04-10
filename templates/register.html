@@ -8,6 +8,7 @@
             <p style="color:#999; font-size:0.86rem; margin-bottom:20px;">Join iConnect and start sharing</p>
             {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
             <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" placeholder="e.g. john_doe" required />
@@ -23,7 +24,7 @@
                 <button type="submit" class="btn btn-primary btn-full">Create Account</button>
             </form>
             <p style="text-align:center; margin-top:16px; font-size:0.86rem; color:#777;">
-                Already have an account? <a href="/login" style="color:#1877f2;">Log in</a>
+                Already have an account? <a href="{{ url_for('auth.login') }}" style="color:#1877f2;">Log in</a>
             </p>
         </div>
     </div>
