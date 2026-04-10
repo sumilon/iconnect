@@ -107,7 +107,7 @@
 
 {% if session.get('uid') %}
 <nav>
-    <a href="{{ url_for('main.feed') }}" class="brand">🔗 iConnect</a>
+    <a href="{{ url_for('main.feed') }}" class="brand">&#128279; iConnect</a>
     <div class="nav-links">
         <a href="{{ url_for('main.feed') }}"
            class="{{ 'nav-active' if request.endpoint == 'main.feed' else '' }}">Feed</a>
@@ -122,13 +122,13 @@
             <span class="badge">{{ pending_count }}</span>
             {% endif %}
         </a>
-        <span class="nav-user">👤 {{ session.get('username') }}</span>
+        <span class="nav-user">&#128100; {{ session.get('username') }}</span>
         <a href="{{ url_for('auth.logout') }}" class="btn-nav-logout">Logout</a>
     </div>
 </nav>
 {% else %}
 <nav>
-    <a href="{{ url_for('main.index') }}" class="brand">🔗 iConnect</a>
+    <a href="{{ url_for('main.index') }}" class="brand">&#128279; iConnect</a>
     <div class="nav-links">
         <a href="{{ url_for('auth.login') }}"
            class="{{ 'nav-active' if request.endpoint == 'auth.login' else '' }}">Log In</a>

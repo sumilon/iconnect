@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}File Too Large — iConnect{% endblock %}
+{% block title %}File Too Large - iConnect{% endblock %}
 {% block content %}
 <div class="container" style="text-align:center; padding-top:60px;">
     <div class="empty">
-        <div class="icon">📦</div>
-        <h2 style="font-size:1.4rem; margin-bottom:10px;">413 — File Too Large</h2>
+        <div class="icon">&#128230;</div>
+        <h2 style="font-size:1.4rem; margin-bottom:10px;">413 - File Too Large</h2>
         <p>The image you tried to upload exceeds the 8 MB limit. Please choose a smaller file.</p>
         <a href="{{ url_for('posts.upload') }}" class="btn btn-primary" style="margin-top:20px;">Try Again</a>
     </div>

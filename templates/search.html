@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Search — iConnect{% endblock %}
+{% block title %}Search - iConnect{% endblock %}
 {% block extra_style %}
 <style>
     .search-bar { display: flex; gap: 10px; margin-bottom: 24px; }
@@ -21,7 +21,7 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h2 style="margin-bottom:20px;">🔍 Find People</h2>
+    <h2 style="margin-bottom:20px;">&#128269; Find People</h2>
 
     <form method="GET" action="{{ url_for('main.search') }}" class="search-bar">
         <input type="text" name="q" placeholder="Search by username..." value="{{ query }}" autofocus />
@@ -54,7 +54,7 @@
 
     {% elif not query %}
     <div class="empty">
-        <div class="icon">🔎</div>
+        <div class="icon">&#128270;</div>
         <p>Type a username above to find people.</p>
     </div>
     {% endif %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ user.username }} — iConnect{% endblock %}
+{% block title %}{{ user.username }} - iConnect{% endblock %}
 {% block extra_style %}
 <style>
     .profile-header {
@@ -62,7 +62,7 @@
         {% if is_own %}
         <div class="profile-actions">
             <a href="{{ url_for('posts.upload') }}" class="btn btn-primary btn-sm">+ Post</a>
-            <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline btn-sm">🔑 Change Password</a>
+            <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline btn-sm">&#128273; Change Password</a>
         </div>
         {% else %}
         {% if follow_status == "approved" %}
@@ -85,7 +85,7 @@
     {% if is_own and pending_requests %}
     <div style="margin-bottom:20px;">
         <h3 style="font-size:0.95rem; margin-bottom:12px; color:#b45309;">
-            🔔 Pending Follow Requests ({{ pending_requests|length }})
+            &#128276; Pending Follow Requests ({{ pending_requests|length }})
         </h3>
         {% for req in pending_requests %}
         <div class="request-card">
@@ -110,24 +110,24 @@
 
     <!-- Posts Section -->
     <div class="page-header">
-        <h2>🖼️ {% if is_own %}Your Posts{% else %}Posts{% endif %}</h2>
+        <h2>&#128444; {% if is_own %}Your Posts{% else %}Posts{% endif %}</h2>
     </div>
 
     {% if not is_own and follow_status != "approved" %}
     <div class="locked">
-        <div class="icon">🔒</div>
+        <div class="icon">&#128274;</div>
         {% if follow_status == "pending" %}
         <p>Your follow request is pending approval.</p>
         <p style="font-size:0.83rem; margin-top:6px;">Posts will be visible once {{ user.username }} approves your request.</p>
         {% else %}
         <p>Follow {{ user.username }} to see their posts.</p>
-        <p style="font-size:0.83rem; margin-top:6px;">Posts are private — only approved followers can view them.</p>
+        <p style="font-size:0.83rem; margin-top:6px;">Posts are private - only approved followers can view them.</p>
         {% endif %}
     </div>
 
     {% elif not posts %}
     <div class="empty card">
-        <div class="icon">📷</div>
+        <div class="icon">&#128247;</div>
         <p>No posts yet.</p>
         {% if is_own %}
         <a href="{{ url_for('posts.upload') }}" class="btn btn-primary">Upload Your First Photo</a>
@@ -147,7 +147,7 @@
             <form method="POST" action="{{ url_for('posts.delete_post', post_id=post.id) }}"
                   onsubmit="return confirm('Delete this post? This cannot be undone.');">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
-                <button class="btn btn-danger btn-sm">🗑 Delete</button>
+                <button class="btn btn-danger btn-sm">&#128465; Delete</button>
             </form>
             {% endif %}
         </div>
