@@ -78,14 +78,10 @@ pip freeze > requirements.txt
 Open `app.py` and update these 3 lines:
 
 ```python
-app.secret_key   = "any-random-string-you-choose"
+FLASK_SECRET_KEY   = "any-random-string-you-choose"
 BUCKET_NAME      = "your-gcs-bucket-name"
 FIREBASE_API_KEY = "your-firebase-web-api-key"
 ```
-
-$env:FLASK_SECRET_KEY="your-random-secret-key-here"
-$env:BUCKET_NAME="image-feed-poc-sumilon"
-$env:FIREBASE_API_KEY="AIzaSyDHJfuB3ulmdGN3rx0bWekqQj9tbtoFzhY"
 
 
 ### Step 6 — Run locally
@@ -154,48 +150,6 @@ serviceAccountKey.json
 .env
 README.md
 ```
-
-### File 4 — Update app.py to read secrets from environment
-
-When deployed on Cloud Run, secrets come as environment variables.
-Update `app.py` to read from environment variables with a fallback
-for local development:
-
-```python
-import os
-import json
-
-# ── Secret configuration ───────────────────────────────────────────────────
-# On Cloud Run: values come from Secret Manager via environment variables
-# Locally: values come from the defaults you set here
-
-app.secret_key   = os.environ.get("FLASK_SECRET_KEY", "local-dev-secret")
-BUCKET_NAME      = os.environ.get("BUCKET_NAME", "your-bucket-name")
-FIREBASE_API_KEY = os.environ.get("FIREBASE_API_KEY", "your-firebase-api-key")
-
-# ── Firebase initialization ────────────────────────────────────────────────
-# On Cloud Run: reads from GOOGLE_CREDENTIALS environment variable (JSON string)
-# Locally: reads from serviceAccountKey.json file
-
-if os.environ.get("GOOGLE_CREDENTIALS"):
-    # Cloud Run — parse JSON string from Secret Manager
-    cred_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
-    cred = credentials.Certificate(cred_dict)
-else:
-    # Local — read from file
-    cred = credentials.Certificate("serviceAccountKey.json")
-
-firebase_admin.initialize_app(cred)
-db             = firestore.client()
-storage_client = storage.Client.from_service_account_info(
-    json.loads(os.environ["GOOGLE_CREDENTIALS"])
-) if os.environ.get("GOOGLE_CREDENTIALS") else \
-    storage.Client.from_service_account_json("serviceAccountKey.json")
-```
-
-Replace the existing Firebase init block at the top of `app.py` with the above.
-
----
 
 ## 4. Push Code to GitHub
 
