@@ -3,7 +3,7 @@ Main views blueprint — index, feed, search, profile pages.
 """
 
 from firebase_admin import firestore as fs
-from flask import Blueprint, redirect, render_template, request, session, url_for
+from flask import Blueprint, Response, redirect, render_template, request, session, url_for
 
 from .extensions import db
 from .helpers import (
@@ -18,6 +18,21 @@ main_bp = Blueprint("main", __name__)
 
 # Posts shown per feed page
 _PAGE_SIZE = 10
+
+# ── Favicon ────────────────────────────────────────────────────────────────
+
+_FAVICON_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+    '<rect width="100" height="100" rx="22" fill="#1877f2"/>'
+    '<text y="75" x="50" text-anchor="middle" font-size="62" '
+    'font-family="Segoe UI Emoji,Apple Color Emoji,sans-serif">&#128279;</text>'
+    '</svg>'
+)
+
+@main_bp.route("/favicon.svg")
+def favicon():
+    """Serve the app favicon as a plain SVG — no Jinja2 rendering involved."""
+    return Response(_FAVICON_SVG, mimetype="image/svg+xml")
 
 
 # ── Landing ────────────────────────────────────────────────────────────────
