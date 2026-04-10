@@ -34,14 +34,23 @@ def create_app():
     # ── Error handlers ─────────────────────────────────────────────────────
     @app.errorhandler(404)
     def not_found(exc):
-        return render_template("404.html"), 404
+        try:
+            return render_template("404.html"), 404
+        except Exception:
+            return "404 Not Found", 404
 
     @app.errorhandler(413)
     def request_entity_too_large(exc):
-        return render_template("413.html"), 413
+        try:
+            return render_template("413.html"), 413
+        except Exception:
+            return "413 Request Too Large", 413
 
     @app.errorhandler(500)
     def internal_error(exc):
-        return render_template("500.html"), 500
+        try:
+            return render_template("500.html"), 500
+        except Exception:
+            return "500 Internal Server Error", 500
 
     return app
