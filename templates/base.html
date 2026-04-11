@@ -485,9 +485,10 @@
     });
     confirmBtn.addEventListener('click', function () {
         if (!pendingForm) return;
+        var formToSubmit = pendingForm;  /* save ref before closeModal nullifies it */
         closeModal();
         showLoading('Deleting post\u2026');
-        pendingForm.submit();
+        formToSubmit.submit();
     });
 })();
 </script>
