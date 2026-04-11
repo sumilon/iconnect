@@ -11,3 +11,5 @@ google-cloud-storage>=2.16,<3.0
 
 # ── HTTP client (Firebase REST Auth) ──────────────────────────────────────
 requests>=2.31,<3.0
+# ── Image processing (compression before GCS upload) ──────────────────────
+Pillow>=10.0,<12.0
