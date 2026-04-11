@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}New Post — iConnect{% endblock %}
+{% block extra_style %}
+<style>
+    .upload-wrap {
+        max-width: 520px;
+        margin: 28px auto;
+        padding: 0 16px;
+    }
+    .preview-box {
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f0f2f5;
+        border: 2px dashed #dde1e7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 140px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .preview-box:hover { border-color: #1877f2; }
+    .preview-box img {
+        width: 100%;
+        max-height: 360px;
+        object-fit: cover;
+        display: block;
+    }
+    .preview-placeholder {
+        text-align: center;
+        color: #aaa;
+        padding: 20px;
+    }
+    .preview-placeholder .icon { font-size: 2rem; margin-bottom: 6px; }
+    .preview-placeholder p { font-size: 0.83rem; }
+    .char-count {
+        text-align: right;
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-top: 4px;
+    }
+    .char-count.warn { color: #f59e0b; }
+    .char-count.over { color: #dc2626; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="upload-wrap">
+    <div class="page-header">
+        <h2>&#128247; New Post</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {% if error %}
+            <div class="alert alert-error">&#9888; {{ error }}</div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" id="uploadForm" data-loading-msg="Uploading & compressing image…">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
+
+                <!-- Image picker with preview -->
+                <div class="form-group">
+                    <label>Photo</label>
+                    <div class="preview-box" id="previewBox" onclick="document.getElementById('imgInput').click()">
+                        <div class="preview-placeholder" id="previewPlaceholder">
+                            <div class="icon">&#128444;</div>
+                            <p>Click to choose a photo</p>
+                        </div>
+                        <img id="previewImg" src="" alt="preview" style="display:none;" />
+                    </div>
+                    <input type="file" id="imgInput" name="image" accept="image/*" required
+                           style="display:none;" onchange="previewImage(this)" />
+                    <p style="font-size:0.75rem; color:#aaa; margin-top:4px;">PNG, JPG, GIF, WebP — max 8 MB</p>
+                </div>
+
+                <!-- Caption -->
+                <div class="form-group">
+                    <label for="caption">Caption <span style="color:#bbb; font-weight:400;">(optional)</span></label>
+                    <textarea id="caption" name="caption" rows="3"
+                              placeholder="Write something about this photo..."
+                              maxlength="500"
+                              oninput="updateCount(this)"></textarea>
+                    <div class="char-count" id="charCount">0 / 500</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Publish Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(input) {
+    var file = input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('previewPlaceholder').style.display = 'none';
+        var img = document.getElementById('previewImg');
+        img.src = e.target.result;
+        img.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+function updateCount(el) {
+    var len = el.value.length;
+    var cc  = document.getElementById('charCount');
+    cc.textContent = len + ' / 500';
+    cc.className = 'char-count' + (len > 460 ? ' warn' : '') + (len >= 500 ? ' over' : '');
+}
+</script>
+{% endblock %}

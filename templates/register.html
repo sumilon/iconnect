@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Create Account — iConnect{% endblock %}
+
+{% block extra_style %}
+<style>
+    body { background: #f0f2f5; }
+    .auth-wrap {
+        min-height: calc(100vh - 54px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+    }
+    .auth-box {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        padding: 36px 32px;
+        width: 100%;
+        max-width: 420px;
+    }
+    .auth-logo { text-align: center; margin-bottom: 24px; }
+    .auth-logo span { font-size: 2.2rem; }
+    .auth-logo h1 { font-size: 1.5rem; font-weight: 800; color: #1877f2; margin-top: 6px; }
+    .auth-box h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .auth-box .subtitle { font-size: 0.85rem; color: #8a8d91; margin-bottom: 24px; }
+    .hint { font-size: 0.75rem; color: #aaa; margin-top: 4px; }
+    .auth-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: #8a8d91;
+    }
+    .auth-footer a { color: #1877f2; text-decoration: none; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+    @media (max-width: 480px) {
+        .auth-box { padding: 28px 20px; border-radius: 12px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-box">
+        <div class="auth-logo">
+            <span>&#128279;</span>
+            <h1>iConnect</h1>
+        </div>
+        <h2>Create your account</h2>
+        <p class="subtitle">Join iConnect and start sharing</p>
+
+        {% if error %}
+        <div class="alert alert-error">&#9888; {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" data-loading-msg="Creating your account…">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username"
+                       placeholder="e.g. john_doe" required autocomplete="username"
+                       pattern="[a-z0-9_]{3,20}" />
+                <p class="hint">3–20 characters: lowercase letters, numbers, underscores</p>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email"
+                       placeholder="you@example.com" required autocomplete="email" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                       placeholder="Min 6 characters" required autocomplete="new-password"
+                       minlength="6" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top:4px;">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
