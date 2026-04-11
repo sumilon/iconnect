@@ -2,6 +2,7 @@
 Posts blueprint — /upload and /post/delete/<post_id> routes.
 """
 
+import io
 import uuid
 
 from firebase_admin import firestore as fs
@@ -14,6 +15,7 @@ from flask import (
     session,
     url_for,
 )
+from PIL import Image
 from werkzeug.utils import secure_filename
 
 from .extensions import db, storage_client
@@ -24,6 +26,37 @@ from .helpers import (
     utcnow,
     validate_csrf,
 )
+
+# ── Image compression settings ─────────────────────────────────────────────
+# Images are resized so neither dimension exceeds MAX_IMAGE_PX, then saved
+# as JPEG at JPEG_QUALITY. Keeping quality at 85 gives a good visual result
+# while typically reducing file size by 60–80 % compared to the raw upload.
+MAX_IMAGE_PX  = 1280   # max width or height in pixels
+JPEG_QUALITY  = 85     # JPEG compression quality (1–95; 85 is a safe default)
+
+
+def compress_image(file_storage) -> tuple[io.BytesIO, str]:
+    """
+    Read a Werkzeug FileStorage image, resize it so neither side exceeds
+    MAX_IMAGE_PX, and re-encode it as JPEG.
+
+    Returns:
+        buf          – BytesIO containing the compressed JPEG bytes (seeked to 0)
+        content_type – always "image/jpeg"
+    """
+    img = Image.open(file_storage)
+
+    # Convert palette / RGBA / P modes to RGB so JPEG encoding works cleanly
+    if img.mode not in ("RGB", "L"):
+        img = img.convert("RGB")
+
+    # Resize only if the image is larger than the cap (preserve aspect ratio)
+    img.thumbnail((MAX_IMAGE_PX, MAX_IMAGE_PX), Image.LANCZOS)
+
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+    buf.seek(0)
+    return buf, "image/jpeg"
 
 posts_bp = Blueprint("posts", __name__)
 
@@ -60,14 +93,20 @@ def upload():
             pending_count=pending_count,
         )
 
-    # ── Sanitise filename and upload to GCS ────────────────────────────────
+    # ── Compress image before uploading to GCS ─────────────────────────────
+    # Images are resized (max MAX_IMAGE_PX px on longest side) and re-encoded
+    # as JPEG at JPEG_QUALITY to minimise GCS storage costs.
+    compressed_buf, content_type = compress_image(image_file)
+
+    # Always store as .jpg after compression regardless of original extension
     safe_name   = secure_filename(image_file.filename)
-    filename    = f"{uuid.uuid4().hex}_{safe_name}"
+    base_name   = safe_name.rsplit(".", 1)[0]          # strip original extension
+    filename    = f"{uuid.uuid4().hex}_{base_name}.jpg"
     gcs_path    = f"posts/{filename}"
     bucket_name = current_app.config["BUCKET_NAME"]
     bucket      = storage_client.bucket(bucket_name)
     blob        = bucket.blob(gcs_path)
-    blob.upload_from_file(image_file, content_type=image_file.content_type)
+    blob.upload_from_file(compressed_buf, content_type=content_type)
 
     image_url = f"https://storage.googleapis.com/{bucket_name}/{gcs_path}"
 
