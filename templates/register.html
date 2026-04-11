@@ -53,7 +53,7 @@
         <div class="alert alert-error">&#9888; {{ error }}</div>
         {% endif %}
 
-        <form method="POST" data-loading-msg="Creating your account…">
+        <form method="POST" data-ic-msg="Creating your account…">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
             <div class="form-group">
                 <label for="username">Username</label>

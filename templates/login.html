@@ -55,7 +55,7 @@
         <div class="alert alert-success">&#10003; {{ success }}</div>
         {% endif %}
 
-        <form method="POST" data-loading-msg="Logging in…">
+        <form method="POST" data-ic-msg="Logging in…">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
             <div class="form-group">
                 <label for="email">Email</label>

@@ -56,7 +56,7 @@
             <div class="alert alert-error">&#9888; {{ error }}</div>
             {% endif %}
 
-            <form method="POST" enctype="multipart/form-data" id="uploadForm" data-loading-msg="Uploading & compressing image…">
+            <form method="POST" enctype="multipart/form-data" id="uploadForm" data-ic-msg="Uploading & compressing image…">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
 
                 <!-- Image picker with preview -->

@@ -41,13 +41,7 @@
             gap: 6px;
         }
         .brand-icon { font-size: 1.15rem; }
-
-        /* Desktop nav links */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
+        .nav-links { display: flex; align-items: center; gap: 2px; }
         .nav-links a {
             color: rgba(255,255,255,0.9);
             text-decoration: none;
@@ -61,7 +55,6 @@
         }
         .nav-links a:hover { background: rgba(255,255,255,0.2); color: white; }
         .nav-active { background: rgba(255,255,255,0.22) !important; color: white !important; font-weight: 700; }
-
         .nav-divider { width: 1px; height: 22px; background: rgba(255,255,255,0.25); margin: 0 4px; }
         .nav-user {
             color: rgba(255,255,255,0.75);
@@ -72,8 +65,6 @@
             text-overflow: ellipsis;
             max-width: 120px;
         }
-
-        /* Badge (notification count) */
         .badge {
             background: #e53e3e;
             color: white;
@@ -90,8 +81,6 @@
             top: 2px;
             right: 2px;
         }
-
-        /* Logout button */
         .btn-nav-action {
             background: rgba(255,255,255,0.15);
             color: white;
@@ -106,8 +95,6 @@
             white-space: nowrap;
         }
         .btn-nav-action:hover { background: rgba(255,255,255,0.28); }
-
-        /* Mobile hamburger */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -116,6 +103,8 @@
             padding: 6px;
             border-radius: 6px;
             transition: background 0.15s;
+            background: none;
+            border: none;
         }
         .hamburger:hover { background: rgba(255,255,255,0.18); }
         .hamburger span {
@@ -124,10 +113,7 @@
             height: 2px;
             background: white;
             border-radius: 2px;
-            transition: all 0.25s;
         }
-
-        /* Mobile drawer */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -156,14 +142,9 @@
             text-align: left;
             transition: background 0.15s;
         }
-        .mobile-menu a:hover,
-        .mobile-menu button:hover { background: rgba(255,255,255,0.18); }
+        .mobile-menu a:hover, .mobile-menu button:hover { background: rgba(255,255,255,0.18); }
         .mobile-menu .m-nav-active { background: rgba(255,255,255,0.22) !important; font-weight: 700; }
-        .mobile-menu .m-user {
-            color: rgba(255,255,255,0.55);
-            font-size: 0.78rem;
-            padding: 6px 14px 10px;
-        }
+        .mobile-menu .m-user { color: rgba(255,255,255,0.55); font-size: 0.78rem; padding: 6px 14px 10px; }
         .mobile-menu .m-sep { height: 1px; background: rgba(255,255,255,0.18); margin: 6px 0; }
 
         /* ── LAYOUT ───────────────────────────────────────────────────── */
@@ -203,11 +184,7 @@
         .btn-success { background: #16a34a; color: white; }
         .btn-danger  { background: #dc2626; color: white; }
         .btn-grey    { background: #e4e6eb; color: #444; }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #1877f2;
-            color: #1877f2;
-        }
+        .btn-outline { background: transparent; border: 1.5px solid #1877f2; color: #1877f2; }
         .btn-outline:hover { background: #eef4ff; filter: none; }
         .btn-sm   { padding: 6px 13px; font-size: 0.8rem; border-radius: 7px; }
         .btn-full { width: 100%; }
@@ -243,11 +220,7 @@
             background: white;
             box-shadow: 0 0 0 3px rgba(24,119,242,0.12);
         }
-        .form-group input[type="file"] {
-            padding: 8px 10px;
-            background: white;
-            cursor: pointer;
-        }
+        .form-group input[type="file"] { padding: 8px 10px; background: white; cursor: pointer; }
 
         /* ── ALERTS ───────────────────────────────────────────────────── */
         .alert {
@@ -264,64 +237,92 @@
         .alert-info    { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
 
         /* ── POST CARD ────────────────────────────────────────────────── */
-        .post-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px 8px;
-        }
+        .post-meta { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
         .avatar {
-            width: 38px;
-            height: 38px;
+            width: 38px; height: 38px;
             border-radius: 50%;
             background: linear-gradient(135deg, #1877f2, #0d5bc4);
-            color: white;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            text-transform: uppercase;
+            color: white; font-weight: 700; font-size: 0.95rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; text-transform: uppercase;
         }
         .post-meta .info { flex: 1; min-width: 0; }
-        .post-meta .info .name {
-            font-weight: 700;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .post-meta .info .sub { font-size: 0.74rem; color: #8a8d91; margin-top: 1px; }
+        .post-meta .info .name { font-weight: 700; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .post-meta .info .sub  { font-size: 0.74rem; color: #8a8d91; margin-top: 1px; }
         .post-img { width: 100%; display: block; max-height: 520px; object-fit: cover; }
-        .post-caption {
-            padding: 10px 14px 12px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #1c1e21;
-            border-top: 1px solid #f0f2f5;
-        }
+        .post-caption { padding: 10px 14px 12px; font-size: 0.9rem; line-height: 1.5; color: #1c1e21; border-top: 1px solid #f0f2f5; }
 
         /* ── EMPTY STATE ──────────────────────────────────────────────── */
-        .empty {
-            text-align: center;
-            padding: 48px 20px;
-            color: #8a8d91;
-        }
+        .empty { text-align: center; padding: 48px 20px; color: #8a8d91; }
         .empty .icon { font-size: 2.6rem; margin-bottom: 12px; }
         .empty p     { margin-bottom: 18px; font-size: 0.9rem; line-height: 1.6; }
 
         /* ── PAGE HEADER ──────────────────────────────────────────────── */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .page-header h2 { font-size: 1.1rem; font-weight: 700; }
 
         /* ── DIVIDER ──────────────────────────────────────────────────── */
         .divider { height: 1px; background: #e4e6eb; margin: 16px 0; }
+
+        /* ── LOADING OVERLAY ──────────────────────────────────────────── */
+        #ic-loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+        #ic-loading-overlay.ic-active { display: flex; }
+        .ic-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #dde1e7;
+            border-top-color: #1877f2;
+            border-radius: 50%;
+            animation: ic-spin 0.75s linear infinite;
+        }
+        @keyframes ic-spin { to { transform: rotate(360deg); } }
+        .ic-loading-text { font-size: 0.95rem; font-weight: 600; color: #1877f2; }
+
+        /* ── DELETE CONFIRM MODAL ─────────────────────────────────────── */
+        #ic-confirm-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        #ic-confirm-backdrop.ic-active { display: flex; }
+        .ic-modal-box {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+            max-width: 380px;
+            width: 100%;
+            padding: 32px 24px 24px;
+            text-align: center;
+            animation: ic-pop 0.2s ease;
+        }
+        @keyframes ic-pop {
+            from { transform: scale(0.88); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+        .ic-modal-icon  { font-size: 2.8rem; margin-bottom: 14px; }
+        .ic-modal-title { font-size: 1.1rem; font-weight: 800; color: #1c1e21; margin-bottom: 8px; }
+        .ic-modal-body  { font-size: 0.875rem; color: #606770; line-height: 1.6; margin-bottom: 26px; }
+        .ic-modal-actions { display: flex; gap: 10px; justify-content: center; }
+        .ic-modal-actions .btn { min-width: 120px; }
 
         /* ── RESPONSIVE ───────────────────────────────────────────────── */
         @media (max-width: 600px) {
@@ -331,89 +332,29 @@
             .card-body { padding: 16px; }
             .btn { padding: 8px 14px; }
         }
-
-        /* ── LOADING OVERLAY ──────────────────────────────────────────── */
-        #loadingOverlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.82);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            z-index: 9999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-        }
-        #loadingOverlay.active { display: flex; }
-        .spinner {
-            width: 46px;
-            height: 46px;
-            border: 4px solid #dde1e7;
-            border-top-color: #1877f2;
-            border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: #1877f2;
-            letter-spacing: 0.01em;
-        }
-
-        /* ── CONFIRM MODAL ────────────────────────────────────────────── */
-        #confirmModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            z-index: 9998;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        #confirmModal.active { display: flex; }
-        .modal-box {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-            max-width: 380px;
-            width: 100%;
-            padding: 28px 24px 22px;
-            text-align: center;
-            animation: modalPop 0.2s ease;
-        }
-        @keyframes modalPop {
-            from { transform: scale(0.92); opacity: 0; }
-            to   { transform: scale(1);    opacity: 1; }
-        }
-        .modal-icon { font-size: 2.4rem; margin-bottom: 12px; }
-        .modal-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: #1c1e21;
-            margin-bottom: 8px;
-        }
-        .modal-body {
-            font-size: 0.875rem;
-            color: #606770;
-            line-height: 1.55;
-            margin-bottom: 22px;
-        }
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        .modal-actions .btn { min-width: 110px; }
     </style>
     {% block extra_style %}{% endblock %}
 </head>
 <body>
+
+<!-- ── Loading Overlay ───────────────────────────────────────────────────── -->
+<div id="ic-loading-overlay">
+    <div class="ic-spinner"></div>
+    <div class="ic-loading-text" id="ic-loading-text">Please wait…</div>
+</div>
+
+<!-- ── Delete Confirm Modal ──────────────────────────────────────────────── -->
+<div id="ic-confirm-backdrop">
+    <div class="ic-modal-box">
+        <div class="ic-modal-icon">🗑️</div>
+        <div class="ic-modal-title">Delete this post?</div>
+        <div class="ic-modal-body">This will permanently remove the post and its image.<br>This action cannot be undone.</div>
+        <div class="ic-modal-actions">
+            <button class="btn btn-grey" id="ic-cancel-btn">Cancel</button>
+            <button class="btn btn-danger" id="ic-confirm-btn">Delete</button>
+        </div>
+    </div>
+</div>
 
 {% if session.get('uid') %}
 <!-- ── Authenticated nav ──────────────────────────────────────────────── -->
@@ -439,8 +380,7 @@
         <span class="nav-user">&#128100; {{ session.get('username') }}</span>
         <a href="{{ url_for('auth.logout') }}" class="btn-nav-action">Logout</a>
     </div>
-    <!-- Mobile hamburger -->
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <button class="hamburger" id="ic-hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
     </button>
 </nav>
@@ -476,7 +416,7 @@
         <a href="{{ url_for('auth.register') }}"
            class="{{ 'nav-active' if request.endpoint == 'auth.register' else '' }}">Register</a>
     </div>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <button class="hamburger" id="ic-hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
     </button>
 </nav>
@@ -490,18 +430,66 @@
 
 {% block content %}{% endblock %}
 
-PLACEHOLDER_REPLACED
-        var m = document.getElementById('mobileMenu');
-        m.classList.toggle('open');
+<script>
+(function () {
+    /* ── Mobile menu ──────────────────────────────────────────────── */
+    var hamburger  = document.getElementById('ic-hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('open');
+        });
+        document.addEventListener('click', function (e) {
+            if (!mobileMenu.contains(e.target) && e.target !== hamburger) {
+                mobileMenu.classList.remove('open');
+            }
+        });
     }
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        var menu = document.getElementById('mobileMenu');
-        var hamburger = document.querySelector('.hamburger');
-        if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
-            menu.classList.remove('open');
-        }
+
+    /* ── Loading overlay ──────────────────────────────────────────── */
+    var overlay    = document.getElementById('ic-loading-overlay');
+    var loadingTxt = document.getElementById('ic-loading-text');
+
+    function showLoading(msg) {
+        loadingTxt.textContent = msg || 'Please wait\u2026';
+        overlay.classList.add('ic-active');
+    }
+
+    /* Show on form submit — skip forms that opt out (delete forms use modal) */
+    document.addEventListener('submit', function (e) {
+        if (e.target.dataset.icSkip) return;
+        showLoading(e.target.dataset.icMsg || 'Please wait\u2026');
+    }, true);   /* capture phase so it fires before any inline handlers */
+
+    /* ── Delete confirm modal ─────────────────────────────────────── */
+    var backdrop    = document.getElementById('ic-confirm-backdrop');
+    var confirmBtn  = document.getElementById('ic-confirm-btn');
+    var cancelBtn   = document.getElementById('ic-cancel-btn');
+    var pendingForm = null;
+
+    /* Called inline from the delete button */
+    window.icConfirmDelete = function (btn) {
+        pendingForm = btn.closest('form');
+        backdrop.classList.add('ic-active');
+    };
+
+    function closeModal() {
+        backdrop.classList.remove('ic-active');
+        pendingForm = null;
+    }
+
+    cancelBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) closeModal();
     });
+    confirmBtn.addEventListener('click', function () {
+        if (!pendingForm) return;
+        closeModal();
+        showLoading('Deleting post\u2026');
+        pendingForm.submit();
+    });
+})();
 </script>
 </body>
 </html>
