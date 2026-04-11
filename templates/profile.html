@@ -147,14 +147,14 @@
         {% else %}
         <div class="profile-action-row">
             {% if follow_status == "approved" %}
-            <form method="POST" action="{{ url_for('social.unfollow', target_uid=target_uid) }}" data-loading-msg="Unfollowing…">
+            <form method="POST" action="{{ url_for('social.unfollow', target_uid=target_uid) }}" data-ic-msg="Unfollowing…">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                 <button class="btn btn-grey btn-sm">&#10003; Following</button>
             </form>
             {% elif follow_status == "pending" %}
             <button class="btn btn-grey btn-sm" disabled>&#8987; Request Sent</button>
             {% else %}
-            <form method="POST" action="{{ url_for('social.send_follow_request', target_uid=target_uid) }}" data-loading-msg="Sending follow request…">
+            <form method="POST" action="{{ url_for('social.send_follow_request', target_uid=target_uid) }}" data-ic-msg="Sending follow request…">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                 <button class="btn btn-primary btn-sm">&#43; Follow</button>
             </form>
@@ -174,11 +174,11 @@
             </div>
             <span class="rname">{{ req.from_username }}</span>
             <div class="ractions">
-                <form method="POST" action="{{ url_for('social.approve_follow', request_id=req.request_id) }}" data-loading-msg="Approving request…">
+                <form method="POST" action="{{ url_for('social.approve_follow', request_id=req.request_id) }}" data-ic-msg="Approving request…">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn btn-success btn-sm">Approve</button>
                 </form>
-                <form method="POST" action="{{ url_for('social.decline_follow', request_id=req.request_id) }}" data-loading-msg="Declining request…">
+                <form method="POST" action="{{ url_for('social.decline_follow', request_id=req.request_id) }}" data-ic-msg="Declining request…">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn btn-danger btn-sm">Decline</button>
                 </form>
@@ -226,10 +226,10 @@
             {% if is_own %}
             <form method="POST" action="{{ url_for('posts.delete_post', post_id=post.id) }}"
                   class="post-delete-btn"
-                  data-no-loading="1">
+                  data-ic-skip="1">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                 <button type="button" class="btn btn-danger btn-sm"
-                        onclick="openConfirmModal(this.closest('form'))">&#128465;</button>
+                        onclick="icConfirmDelete(this)">&#128465;</button>
             </form>
             {% endif %}
         </div>
